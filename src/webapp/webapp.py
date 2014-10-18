@@ -33,6 +33,15 @@ def app_settings():
     resp = json.dumps(app_settings)
     return resp, 200
 
+@app.route("/metrics", methods=['GET'])
+def metrics():
+    try:
+        return json.dumps({'results': REDIS_CONN.keys("metrics.*")}), 200
+    except Exception as e:
+        error = "Error: " + e
+        resp = json.dumps({'results': error})
+        return resp, 500
+
 
 @app.route("/api", methods=['GET'])
 def data():
